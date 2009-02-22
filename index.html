@@ -1,0 +1,206 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<script language="JavaScript" type="text/javascript" src="js/jquery.js" ></script>
+	<script language="JavaScript" type="text/javascript" src="js/jquery.styledButton.js" ></script>
+	<script language="JavaScript" type="text/javascript" src="js/shCore.js" ></script>
+	<script language="JavaScript" type="text/javascript" src="js/shBrushJScript.js" ></script>
+	<script language="JavaScript" type="text/javascript" src="js/jquery.beautyOfCode.js" ></script>
+		
+	<link rel="stylesheet" href="css/css.css" type="text/css" />
+	<link rel="stylesheet" href="css/styledButton.css" type="text/css" />
+	<link rel="stylesheet" href="css/SyntaxHighlighter.css" type="text/css" />
+	
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("span").css({
+				 'padding' : '5px 20px',
+				 'font-size' : '14px'
+			});
+			
+			$("span.alone").styledButton({
+				'orientation' : 'alone',
+				'action' : function () { alert( 'omfg' ) },
+				'display' : 'block'
+			});
+			
+			$("span.left").styledButton({
+				'orientation' : 'left'
+			});
+			$("span.center").styledButton({
+				'orientation' : 'center',
+				'action' : { 'on' :function () {
+								alert( "You've turned on the button" );
+							},
+							'off' : function () {
+								alert( "You've turned it off" );
+							} },
+				'toggle' : true
+			});
+			$("span.checked").styledButton({
+				'orientation' : 'center',
+				'role' : 'checkbox',
+				'checked' : true
+			});
+			$("span.tell1").styledButton({
+				'orientation' : 'right',
+				'action' : function () { alert( $("span.checked").val() ) }
+			});
+			$("span.unchecked").styledButton({
+				'orientation' : 'left',
+				'role' : 'checkbox',
+				'checkboxValue' : { 'on' : "custom on!",
+									'off' : "custom off!" }
+			});
+			$("span.tell2").styledButton({
+				'orientation' : 'right',
+				'action' : function () { alert( $("span.unchecked").val() ) }
+			});
+
+			$("span.bla").styledButton({
+				'orientation' : 'alone',
+				'dropdown' : { 'element' : 'ul' },
+				'role' : 'select',
+				'defaultValue' : 'default value',
+				'name' : 'testSelect',
+				'orientation' : 'right',
+				'clear' : true
+			});
+
+			$("span.teller").styledButton({
+				'action' : function () { alert( $("span.bla").val() ) },
+				'orientation' : 'left',
+				'clear' : true
+			});
+			
+			$.beautyOfCode.init('js/clipboard.swf');
+			$("pre").beautifyCode('javascript');
+		} );
+	</script>
+
+	<title>jQuery imageless buttons a la Google</title>
+</head>
+
+<body>
+
+	<h1>jQuery imageless buttons a la Google</h1>
+	<p>This jQuery plugin is an attempt to recreate Google's imageless buttons and prove that it doesn't take a whole team of engineers and an endless cycle of code revision and quality control (their own words) to pull this off. I don't know how Google did it, but my buttons automatically adapt to paddings and other styling you wish to use. They allow for a lot of stylistic customisatoin via a few lines of css while keeping all the display critical css rules hidden deep inside the plugin.</p>
+	<h2>Supported browsers</h2>
+	<p>These buttons have been tested to work properly on:</p>
+	<ul>
+		<li>Opera 9.6x</li>
+		<li>Firefox 3</li>
+		<li>Firefox 2</li>
+		<li>Safari 3</li>
+		<li>Safari 2</li>
+		<li>Internet Explorer 8 beta</li>
+		<li>Internet Explorer 7</li>
+		<li>Internet Explorer 6</li>
+		<li>Chrome</li>
+	</ul>
+	<p>There are two known issues on Internet Explorer though. On activated buttons the right darker border disappears and onchange events are not fired because they don't work on noninput elements.</p>
+	
+	<h2>Examples</h2>
+
+	<span class="alone">Alone</span>
+	<span class="left">Left (dumb)</span><span class="center">Center</span><span class="checked">checked</span><span class="tell1">tell value</span>
+	
+	<span class="unchecked">checkbox</span><span class="tell2">tell 2nd value</span>
+	<br />
+	<span class="teller">Select value?</span><span class="bla" onchange="alert( 'onchange fired' )">Select ⇣
+		<ul>
+			<li>drop 1</li>
+			<li>drop 2</li>
+		</ul>
+	</span>
+
+		
+	<h2>HowTo Use</h2>
+	<p>The buttons should be applicable on any element, although I've mostly tested with spans. Also, in order to preserve the semantic structure of your documents, all markup needed to render the buttons is nested inside the main element. To make a styled Button you basically just call the styledButton() function on it, however there are certain configurations available as explained below.</p>
+	<h3>Requirements:</h3>
+	<ul>
+		<li><a href="http://jquery.com">jQuery</a></li>
+		<li><a href="js/jquery.styledButton.js">styledButton plugin</a></li>
+		<li><a href="css/styledButton.css">styledButton basic css</a></li>
+	</ul>
+	<h3>Code:</h3>
+	<pre>
+		<code class="javascript">
+		$(document).ready( function () {
+			 // this is unfortunately needed due to a race condition in safari
+			$("span").css({
+				 'padding' : '3px 20px',
+				 'font-size' : '12px',
+			});
+			
+			$("span.makeMeAbutton").styledButton({
+			
+				'orientation' : 'alone', // one of {alone, left, center, right} default is alone
+				
+				// action can be specified as a single function to be fired on any click event
+				'action' : { 
+							'on' :function () {
+								alert( "You've turned on the button" );
+							},
+							'off' : function () {
+								alert( "You've turned it off" );
+							} 
+						},
+				
+				'display' : 'block', // main element's display css, default is inline-block
+				
+				'toggle' : true, // is the button togglable, default is false
+				
+				'role' : 'checkbox', // one of {button, checkbox, select}, default is button. Checkbox/select change some other defaults
+				
+				'checked' : true, // display as a checked checkbox or not, default is false
+				
+				// checkbox values, default are on and off
+				'checkboxValue' : { 
+									'on' : "custom on!",
+									'off' : "custom off!" 
+								},
+				
+				'defaultValue' : "fubar", // default value for select, doubles as default for checkboxValue.on if checkbox, default is empty
+				
+				'name' : 'checkfield', // name to use for hidden input field for checkbox and select so form can submit values
+				
+				// enable a dropdown menu, default is none
+				'dropdown' : {
+						'element' : 'ul' // what nested element to use as dropdown, default is ul
+						}
+						
+				'clear' : false // in firefox 2 the buttons have to be floated to work properly, set this to true to have them display in a new line
+				
+				'border' : 2 // use this if you're using a nonstandard border thicknes
+			});
+		} );
+		</code>
+	</pre>
+	
+	<h2>Changelog</h2>
+	<ul>
+		<li>17th February 2009 - initial release</li>
+		<li>18th February 2009
+			<ul>
+				<li>works on FF2</li>
+				<li>fixed some display issues in safari</li>
+			</ul>
+		</li>
+		<li>19th February 2009
+			<ul>
+				<li>works on FF2</li>
+				<li>works on safari 2</li>
+				<li>works on IE8 beta</li>
+				<li>works on IE7</li>
+				<li>works on IE6</li>
+				<li>works on chrome</li>
+			</ul>
+		</li>
+	</ul>
+
+</body>
+
+</html>

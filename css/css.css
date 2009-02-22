@@ -1,0 +1,30 @@
+*
+{
+	font-family: arial;
+}
+
+p
+{
+	width: 600px;
+}
+
+pre
+{
+	font-family: "Courier New";
+	font-size: 12px;
+}
+
+span.alone
+{
+	margin-bottom: 10px;
+}
+
+span.bla
+{
+	margin-top: 10px;
+}
+
+h2
+{
+	clear: both;
+}

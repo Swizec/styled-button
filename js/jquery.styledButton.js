@@ -1,13 +1,16 @@
 /* Copyright (c) 2009 Swizec Teller (swizec AT swizec DOT com || http://www.swizec.com)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- * 
+ *
  * See http://swizec.com/code/styledButton/
  */
 
 $.fn.styledButton = function ( params )
 {
-	var button = new styledButton( $(this), params );
+	$(this).each( function ()
+	{
+		var button = new styledButton( $(this), params );
+	} );
 }
 
 function styledButton( element, params )
@@ -17,7 +20,7 @@ function styledButton( element, params )
 	this.inlineBlock = ( this.oldFirefox ) ? '-moz-inline-block' : 'inline-block';
 	this.params = this.setupDefaultParams( params );
 	this.info = this.init();
-	
+
 	this.bordersAndBackground();
 	this.setupRole();
 }
@@ -90,16 +93,16 @@ styledButton.prototype.setupDefaultParams = function ( params )
 			params.action.on = tmp;
 			params.action.off = tmp;
 		}
-		
-		
+
+
 		params.onclick = {};
-		params.onclick.on = function ( event ) { 
-						$(this).styledButtonActivate( event ); 
+		params.onclick.on = function ( event ) {
+						$(this).styledButtonActivate( event );
 						params.action.on( $(this) )
 					};
-		params.onclick.off = function ( event ) { 
-						$(this).styledButtonDeactivate( event ); 
-						params.action.off( $(this) ) 
+		params.onclick.off = function ( event ) {
+						$(this).styledButtonDeactivate( event );
+						params.action.off( $(this) )
 					};
 	}
 	if ( typeof( params.dropdown ) == "undefined" )
@@ -124,16 +127,16 @@ styledButton.prototype.setupDefaultParams = function ( params )
 			params.action.on = tmp;
 			params.action.off = tmp;
 		}
-		
+
 		params.toggle = true;
 		params.onclick = {};
 		params.onclick.on = function ( event ) {
-						$(this).styledButtonActivate(); 
-						$(this).styledButtonDropDownActivate(); 
+						$(this).styledButtonActivate();
+						$(this).styledButtonDropDownActivate();
 					};
 		params.onclick.off = function ( event ) {
 						$(this).styledButtonDeactivate();
-						$(this).styledButtonDropDownDeactivate(); 
+						$(this).styledButtonDropDownDeactivate();
 					};
 	}
 	if ( typeof( params.display ) == "undefined" )
@@ -144,7 +147,7 @@ styledButton.prototype.setupDefaultParams = function ( params )
 	{
 		params.border = 1;
 	}
-	
+
 	return params;
 }
 
@@ -152,20 +155,20 @@ styledButton.prototype.init = function ( )
 {
 	var element = this.element;
 	var params = this.params;
-	
+
 	if ( !$(this).is( '.'+params.cssClass ) )
 	{
 		element.addClass( params.cssClass );
 	}
 	element.addClass( "parent" );
 	element.val( params.defaultValue );
-	
+
 	// this is here because otherwise sizes get calculated wrongly
 	if ( params.hasDropdown )
 	{
 		this.hideDropdown();
 	}
-	
+
 	var oldContent = element.html();
 	var width = element.outerWidth();
 	var height = element.outerHeight();
@@ -174,7 +177,7 @@ styledButton.prototype.init = function ( )
 			left: (element.outerWidth()-element.width())/2
 		}
 	var innerLeft = 0;
-	
+
 	if ( $.browser.safari )
 	{
 		innerLeft = -4;
@@ -183,7 +186,7 @@ styledButton.prototype.init = function ( )
 			width += padding.left;
 		}
 	}
-	
+
 	if ( $.browser.msie )
 	{
 		if ( params.orientation == 'right' || params.orientation == 'center' )
@@ -195,7 +198,7 @@ styledButton.prototype.init = function ( )
 			height -= 1;
 		}
 	}
-	
+
 	element.wrapInner( $('<span></span>').css({
 							'padding' : padding.top+'px 0px '+padding.top+'px '+padding.left+'px',
 							'margin' : 0,
@@ -206,14 +209,14 @@ styledButton.prototype.init = function ( )
 							'-moz-user-select' : 'none'
 						})
 		 			);
-		 			
+
 	var widthDelta = 0;
 	if ( this.oldFirefox && params.orientation == 'right' )
 	{
 		widthDelta = 4;
 	}
-					
-	element.css( { 
+
+	element.css( {
 		'cursor' : 'pointer',
 		'padding-right': 0,
 		'margin-left' : '-1px',
@@ -243,7 +246,7 @@ styledButton.prototype.init = function ( )
 			$(this).removeClass( 'down' );
 			$(this).contents().styledButtonMouseUp();
 		});
-		
+
 	if ( this.oldFirefox && params.display != 'block' )
 	{
 		element.css({
@@ -252,7 +255,7 @@ styledButton.prototype.init = function ( )
 			'margin-top' : ( params.clear ) ? '1em' : 0
 		});
 	}
-		
+
 	if ( !params.toggle )
 	{
 		element.click( params.onclick );
@@ -266,9 +269,9 @@ styledButton.prototype.init = function ( )
 			element.toggle( params.onclick.on, params.onclick.off );
 		}
 	}
-	
+
 	var info = { 'oldContent' : oldContent, 'width' : width, 'height' : height, 'padding' : padding, 'border' : params.border };
-	
+
 	return info;
 }
 
@@ -277,38 +280,38 @@ styledButton.prototype.bordersAndBackground = function ()
 	var element = this.element;
 	var params = this.params;
 	var info = this.info;
-	
+
 	info.sizeDelta = 0;
 	if ( $.browser.msie )
 	{
 		info.sizeDelta = info.border*2;
 	}
-	
+
 	if ( params.orientation == 'left' )
 	{
-		this.background( { 
-				'width' : (info.width-info.border), 
-				'height' : info.height, 
-				'border' : info.border, 
-				'sizeDelta' : info.sizeDelta 
+		this.background( {
+				'width' : (info.width-info.border),
+				'height' : info.height,
+				'border' : info.border,
+				'sizeDelta' : info.sizeDelta
 			});
 		this.bordersLeft( info );
 	}else if ( params.orientation == 'center' )
 	{
-		this.background( { 
-				'width' : (info.width-info.border*2), 
-				'height' : info.height, 
-				'marginLeft' : info.border, 
+		this.background( {
+				'width' : (info.width-info.border*2),
+				'height' : info.height,
+				'marginLeft' : info.border,
 				'border' : info.border,
 				'sizeDelta' : info.sizeDelta
 			});
 		this.bordersCenter( info );
 	}else if ( params.orientation == 'right' )
 	{
-		this.background( { 
-				'width' : (info.width-info.border), 
-				'height' : info.height, 
-				'marginLeft' : info.border, 
+		this.background( {
+				'width' : (info.width-info.border),
+				'height' : info.height,
+				'marginLeft' : info.border,
 				'border' : info.border,
 				'sizeDelta' : info.sizeDelta
 			});
@@ -324,7 +327,7 @@ styledButton.prototype.background = function ( info )
 {
 	var element = this.element;
 	var marginLeft = ( typeof( info.marginLeft ) != "undefined" ) ? info.marginLeft : 0;
-	
+
 	element.append( $('<span></span>').css({
 							'width' : info.width,
 							'height' : info.height,
@@ -366,7 +369,7 @@ styledButton.prototype.background = function ( info )
 styledButton.prototype.bordersAlone = function ( info )
 {
 	var element = this.element;
-		
+
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width,
 							'height' : info.height+info.sizeDelta,
@@ -377,7 +380,7 @@ styledButton.prototype.bordersAlone = function ( info )
 							'border-left' : '0px',
 							'border-right' : '0px'
 						})
-						.attr( 'class', 'border top' ) 
+						.attr( 'class', 'border top' )
 					);
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width+info.sizeDelta,
@@ -387,14 +390,14 @@ styledButton.prototype.bordersAlone = function ( info )
 							'border-top' : '0px',
 							'border-bottom' : '0px'
 						})
-						.attr( 'class', 'border side' ) 
+						.attr( 'class', 'border side' )
 					);
 }
 
 styledButton.prototype.bordersLeft = function ( info )
 {
 	var element = this.element;
-	
+
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width,
 							'height' : info.height+info.sizeDelta,
@@ -405,7 +408,7 @@ styledButton.prototype.bordersLeft = function ( info )
 							'border-left' : '0px',
 							'border-right' : '0px'
 						})
-						.attr( 'class', 'border top' ) 
+						.attr( 'class', 'border top' )
 					);
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width-info.border+info.sizeDelta,
@@ -415,14 +418,14 @@ styledButton.prototype.bordersLeft = function ( info )
 							'border-top' : '0px',
 							'border-bottom' : '0px'
 						})
-						.attr( 'class', 'border side left' ) 
+						.attr( 'class', 'border side left' )
 					);
 }
 
 styledButton.prototype.bordersCenter = function ( info )
 {
 	var element = this.element;
-	
+
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width,
 							'height' : info.height+info.sizeDelta,
@@ -433,7 +436,7 @@ styledButton.prototype.bordersCenter = function ( info )
 							'border-left' : '0px',
 							'border-right' : '0px'
 						})
-						.attr( 'class', 'border top' ) 
+						.attr( 'class', 'border top' )
 					);
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width-info.border*2+info.sizeDelta,
@@ -443,14 +446,14 @@ styledButton.prototype.bordersCenter = function ( info )
 							'border-top' : '0px',
 							'border-bottom' : '0px'
 						})
-						.attr( 'class', 'border side center' ) 
+						.attr( 'class', 'border side center' )
 					);
 }
 
 styledButton.prototype.bordersRight = function ( info )
 {
 	var element = this.element;
-	
+
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width,
 							'height' : info.height+info.sizeDelta,
@@ -461,7 +464,7 @@ styledButton.prototype.bordersRight = function ( info )
 							'border-left' : '0px',
 							'border-right' : '0px'
 						})
-						.attr( 'class', 'border top' ) 
+						.attr( 'class', 'border top' )
 					);
 	element.wrapInner( $('<span></span>').css({
 							'width' : info.width-info.border+info.sizeDelta,
@@ -471,14 +474,14 @@ styledButton.prototype.bordersRight = function ( info )
 							'border-top' : '0px',
 							'border-bottom' : '0px'
 						})
-						.attr( 'class', 'border side right' ) 
+						.attr( 'class', 'border side right' )
 					);
 }
 
 styledButton.prototype.hideDropdown = function ()
 {
 	var element = this.element;
-	
+
 	while ( !element.is( this.params.dropdown.element ) && element.contents().size() > 0 )
 	{
 		element = element.contents();
@@ -493,14 +496,14 @@ styledButton.prototype.setupRole = function ()
 {
 	var element = this.element;
 	var params = this.params;
-	
+
 	element.attr( "role", params.role);
-	
+
 	if ( params.role != "button" )
 	{
 		element.append( '<input type="hidden" value="'+params.defaultValue+'" name="'+params.name+'"/>' );
 	}
-	
+
 	if ( params.hasDropdown )
 	{
 		this.setupDropDown();
@@ -520,18 +523,18 @@ styledButton.prototype.setupDropDown = function ()
 	var element = this.element;
 	var params = this.params;
 	var info = this.info;
-	
+
 	while ( !element.is( params.dropdown.element ) && element.contents().size() > 0 )
 	{
 		element = element.contents();
 	}
-	
+
 	var marginDelta = -1;
 	if ( $.browser.safari )
 	{
 		marginDelta = 3;
 	}
-	
+
 	var topDelta = 0;
 	var widthDelta = -4;
 	if ( $.browser.msie )
@@ -539,7 +542,7 @@ styledButton.prototype.setupDropDown = function ()
 		topDelta = info.padding.top*3+params.border;
 		widthDelta = 1;
 	}
-	
+
 	if ( element.is( params.dropdown.element ) )
 	{
 		$(element).addClass( "dropdown" )
@@ -560,12 +563,12 @@ styledButton.prototype.setupRoleSelect = function ()
 	var element = this.element;
 	var params = this.params;
 	var info = this.info;
-	
+
 	while ( !element.is( params.dropdown.element ) && element.contents().size() > 0 )
 	{
 		element = element.contents();
 	}
-	
+
 	if ( element.is( params.dropdown.element ) )
 	{
 		$(element).children().click( function () {
@@ -586,30 +589,30 @@ styledButton.prototype.setupRoleSelect = function ()
 $.fn.styledButtonSetValue = function ( value )
 {
 	var element = $(this);
-	
+
 	while ( !element.is( ".parent" ) && element.parent().size() > 0 )
 	{
 		element = element.parent();
 	}
-	
+
 	$(element).val( value );
 	if ( !$.browser.msie )
 	{
 		$(element).change();
 	}
-	
+
 	while ( !element.is( "input" ) && element.contents().size() > 0 )
 	{
 		element = element.contents();
 	}
-	
+
 	$(element).val( value )
 }
 
 $.fn.styledButtonHover = function ()
 {
 	$(this).addClass( 'hover' );
-	
+
 	if ( $(this).children().size() > 0 )
 	{
 		$(this).children().styledButtonHover();
@@ -620,7 +623,7 @@ $.fn.styledButtonUnhover = function ()
 {
 	$(this).removeClass( 'hover' );
 	$(this).removeClass( 'down' );
-	
+
 	if ( $(this).contents().size() > 0 )
 	{
 		$(this).contents().styledButtonUnhover();
@@ -630,7 +633,7 @@ $.fn.styledButtonUnhover = function ()
 $.fn.styledButtonMouseDown = function ()
 {
 	$(this).addClass( 'down' );
-	
+
 	if ( $(this).contents().size() > 0 )
 	{
 		$(this).contents().styledButtonMouseDown();
@@ -640,7 +643,7 @@ $.fn.styledButtonMouseDown = function ()
 $.fn.styledButtonMouseUp = function ()
 {
 	$(this).removeClass( 'down' );
-	
+
 	if ( $(this).contents().size() > 0 )
 	{
 		$(this).contents().styledButtonMouseUp();
@@ -650,7 +653,7 @@ $.fn.styledButtonMouseUp = function ()
 $.fn.styledButtonActivate = function ()
 {
 	$(this).addClass( 'active' );
-	
+
 	if ( $(this).contents().size() > 0 )
 	{
 		$(this).contents().styledButtonActivate();
@@ -660,7 +663,7 @@ $.fn.styledButtonActivate = function ()
 $.fn.styledButtonDeactivate = function ()
 {
 	$(this).removeClass( 'active' );
-	
+
 	if ( $(this).contents().size() > 0 )
 	{
 		$(this).contents().styledButtonDeactivate();

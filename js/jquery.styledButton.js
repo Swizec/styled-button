@@ -9,7 +9,8 @@ $.fn.styledButton = function ( params )
 {
 	$(this).each( function ()
 	{
-		var button = new styledButton( $(this), params );
+		var tempParams = $.extend( {}, params );
+		var button = new styledButton( $(this), tempParams );
 	} );
 }
 
@@ -18,6 +19,7 @@ function styledButton( element, params )
 	this.element = element;
 	this.oldFirefox = ( $.browser.mozilla && parseFloat( $.browser.version ) < 1.9 );
 	this.inlineBlock = ( this.oldFirefox ) ? '-moz-inline-block' : 'inline-block';
+	this.inParams = params;
 	this.params = this.setupDefaultParams( params );
 	this.info = this.init();
 

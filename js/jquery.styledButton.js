@@ -18,6 +18,7 @@ function styledButton( element, params )
 {
 	this.element = element;
 	this.oldFirefox = ( $.browser.mozilla && parseFloat( $.browser.version ) < 1.9 );
+	this.safari3 = ( $.browser.safari && parseFloat( $.browser.version ) < 526 ) ? true : false;
 	this.inlineBlock = ( this.oldFirefox ) ? '-moz-inline-block' : 'inline-block';
 	this.inParams = params;
 	this.params = this.setupDefaultParams( params );
@@ -180,9 +181,11 @@ styledButton.prototype.init = function ( )
 		}
 	var innerLeft = 0;
 
-	if ( $.browser.safari )
+	if ( this.safari3 )
 	{
 		innerLeft = -4;
+	}else if ( $.browser.safari && params.hasDropdown )
+	{
 		if ( params.hasDropdown )
 		{
 			width += padding.left;
@@ -532,7 +535,7 @@ styledButton.prototype.setupDropDown = function ()
 	}
 
 	var marginDelta = -1;
-	if ( $.browser.safari )
+	if ( this.safari3 )
 	{
 		marginDelta = 3;
 	}

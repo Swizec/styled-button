@@ -294,36 +294,36 @@ styledButton.prototype.bordersAndBackground = function ()
 
 	if ( params.orientation == 'left' )
 	{
-		this.background( {
-				'width' : (info.width-info.border),
-				'height' : info.height,
-				'border' : info.border,
-				'sizeDelta' : info.sizeDelta
-			});
+// 		this.background( {
+// 				'width' : (info.width-info.border),
+// 				'height' : info.height,
+// 				'border' : info.border,
+// 				'sizeDelta' : info.sizeDelta
+// 			});
 		this.bordersLeft( info );
 	}else if ( params.orientation == 'center' )
 	{
-		this.background( {
-				'width' : (info.width-info.border*2),
-				'height' : info.height,
-				'marginLeft' : info.border,
-				'border' : info.border,
-				'sizeDelta' : info.sizeDelta
-			});
+// 		this.background( {
+// 				'width' : (info.width-info.border*2),
+// 				'height' : info.height,
+// 				'marginLeft' : info.border,
+// 				'border' : info.border,
+// 				'sizeDelta' : info.sizeDelta
+// 			});
 		this.bordersCenter( info );
 	}else if ( params.orientation == 'right' )
 	{
-		this.background( {
-				'width' : (info.width-info.border),
-				'height' : info.height,
-				'marginLeft' : info.border,
-				'border' : info.border,
-				'sizeDelta' : info.sizeDelta
-			});
+// 		this.background( {
+// 				'width' : (info.width-info.border),
+// 				'height' : info.height,
+// 				'marginLeft' : info.border,
+// 				'border' : info.border,
+// 				'sizeDelta' : info.sizeDelta
+// 			});
 		this.bordersRight( info );
 	}else if ( params.orientation == 'alone' )
 	{
-		this.background( info );
+// 		this.background( info );
 		this.bordersAlone( info );
 	}
 }

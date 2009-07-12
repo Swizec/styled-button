@@ -214,17 +214,10 @@
 				<li>works on chrome</li>
 			</ul>
 		</li>
-		<li>3rd March 2009
+		<li>3rd March 2009</li>
 			<ul>
 				<li>fixed two real world usage bugs</li>
 				<li>fixed some visual issues on Safari 4 and inside Adobe AIR</li>
-			</ul>
-		</li>
-		<li>12th June 2009
-			<ul>
-				<li>fixed a bug with using tagged captions for dropdowns</li>
-				<li>tested in release version of Safari 4</li>
-				<li>dropped support for Safari 2, since updating the jquery version magically breaks <em>everything</em> and the funcitonality doesn't even load</li>
 			</ul>
 		</li>
 	</ul>

@@ -7,7 +7,7 @@
 
 $.fn.styledButton = function ( params )
 {
-	$(this).each( function ()
+	return $(this).each( function ()
 	{
 		var tempParams = $.extend( {}, params );
 		var button = new styledButton( $(this), tempParams );
@@ -22,10 +22,13 @@ function styledButton( element, params )
 	this.inlineBlock = ( this.oldFirefox ) ? '-moz-inline-block' : 'inline-block';
 	this.inParams = params;
 	this.params = this.setupDefaultParams( params );
-	this.info = this.init();
 
-	this.bordersAndBackground();
-	this.setupRole();
+	if ( !this.element.hasClass( this.params.cssClass ) )
+	{
+		this.info = this.init();
+		this.bordersAndBackground();
+		this.setupRole();
+	}
 }
 
 styledButton.prototype.setupDefaultParams = function ( params )
@@ -493,11 +496,11 @@ styledButton.prototype.hideDropdown = function ()
 	}
 	if ( element.is( this.params.dropdown.element ) )
 	{
-		for ( var i = 0; i < $(element).size(); i += 1 )
+		for ( var i = 0; i < element.size(); i += 1 )
 		{
-			if ( $(element).eq( i ).is( this.params.dropdown.element ) )
+			if ( element.eq( i ).is( this.params.dropdown.element ) )
 			{
-				$(element).eq( i ).css({ "display" : "none" });
+				element.eq( i ).css({ "display" : "none" });
 			}
 		}
 	}
@@ -558,9 +561,9 @@ styledButton.prototype.setupDropDown = function ()
 	{
 		for ( var i = 0; i < $(element).size(); i += 1 )
 		{
-			if ( $(element).eq( i ).is( this.params.dropdown.element ) )
+			if ( element.eq( i ).is( this.params.dropdown.element ) )
 			{
-				$(element).eq( i ).addClass( "dropdown" )
+				element.eq( i ).addClass( "dropdown" )
 				.css( {
 					'display' : 'none',
 					'position' : 'absolute',
@@ -588,11 +591,11 @@ styledButton.prototype.setupRoleSelect = function ()
 
 	if ( element.is( params.dropdown.element ) )
 	{
-		for ( var i = 0; i < $(element).size(); i += 1 )
+		for ( var i = 0; i < element.size(); i += 1 )
 		{
-			if ( $(element).eq( i ).is( this.params.dropdown.element ) )
+			if ( element.eq( i ).is( this.params.dropdown.element ) )
 			{
-				$(element).eq( i ).children().click( function () {
+				element.eq( i ).children().click( function () {
 						var value = $(this).attr( "value" );
 						if ( typeof( value ) != "string" )
 						{
